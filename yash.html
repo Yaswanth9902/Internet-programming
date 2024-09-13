@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GYC Restaurant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        /* General styles */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #242323;
+            color: #333;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            background: #090909;
+            color: #59849f;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 600;
+        }
+
+        .hero {
+            background-image: url('https://inrestoblog.s3.ap-south-1.amazonaws.com/types1.png');
+            height: 60vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .category-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .category-buttons button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .category-buttons button:hover {
+            background-color: #555;
+        }
+
+        .section {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .menu-item {
+            background: #373737;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 15px;
+            padding: 20px;
+            width: 300px;
+            transition: transform 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .menu-item h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .menu-item p {
+            font-size: 1.2em;
+            color: #cbc4c4;
+        }
+
+        .menu-item input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        .total-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .total-container button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .total-container button:hover {
+            background-color: #555;
+        }
+
+        .payment-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .menu {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero h2 {
+                font-size: 2em;
+            }
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .popup-content h3 {
+            margin-top: 0;
+        }
+
+        .popup-content p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .popup-content button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .popup-content button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>GYC Restaurant</h1>
+        <nav>
+            <a href="#menu">Menu</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h2>Welcome to Our Restaurant</h2>
+    </div>
+
+    <div class="category-buttons">
+        <button class="category-btn" data-category="all">All</button>
+        <button class="category-btn" data-category="veg">Vegetarian</button>
+        <button class="category-btn" data-category="non-veg">Non-Vegetarian</button>
+        <button class="category-btn" data-category="beverages">Beverages</button>
+        <button class="category-btn" data-category="starters">Starters</button>
+    </div>
+
+    <div class="section" id="menu">
+        <h2 style="color: azure;">Our Menu</h2>
+        <div class="menu">
+            <!-- Vegetarian Menu Items -->
+            <div class="menu-item" data-category="veg">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6GMD_WH9sl6HjJ4CObB9Lim-51zBji9n5KA&s">
+                <h3 style="color: azure;">Paneer Butter Masala</h3>
+                <p>₹150.00</p>
+                <input type="number" min="0" placeholder="Qty">
+            </div>
+            <div class="menu-item" data-category="veg">
+                <img src="https://carveyourcraving.com/wp-content/uploads/2021/09/Best-Malai-Kofta-recipe-500x500.jpg" alt="Malai Kofta">
+                <h3 style="color: azure;">Malai Kofta</h3>
+                <p>₹180.00</p>
+                <input type="number" min="0" placeholder="Qty">
+            </div>
+            
+            <div class="menu-item" data-category="non-veg">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9k3aQ9aF-SoTeZrZOdkv5FL9A_Pfw2ghUJQ&s" alt="Butter Chicken">
+                <h3 style="color: azure;">Butter Chicken</h3>
+                <p>₹250.00</p>
+                <input type="number" min="0" placeholder="Qty">
+            </div>
+            <div class="menu-item" data-category="non-veg">
+                <img src="https://butfirstchai.com/wp-content/uploads/2023/03/chicken-tikka-skewers-recipe.jpg" alt="Chicken Tikka">
+                <h3 style="color: azure;">Chicken Tikka</h3>
+                <p>₹220.00</p>
+                <input type="number" min="0" placeholder="Qty">
+            </div>
+            <!-- Add 13 more non-vegetarian items here -->
+
+            <!-- Beverages Menu Items -->
+            <div class="menu-item" data-category="beverages">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnFuB33vfZ-OPmKGIe5H-XJ5x0pgSnk5jqGw&s" alt="Mango Lassi">
+                <h3 style="color: azure;">Mango Lassi</h3>
+                <p>₹100.00</p>
+                <input type="number" min="0" placeholder="Qty">
+            </div>
+            <div class="menu-item" data-category="beverages">
+                <img src="https://budleaf.com/wp-content/uploads/2023/04/How-to-make-masala-chai-1568x1039.jpeg" alt="Masala Chai">
+                <h3 style="color: azure;">Masala Chai</h3>
+                <p>₹80.00</p>
+                <input type="number" min="0" placeholder="Qty">
+            </div>
+            <!-- Add 3 more beverages items here -->
+
+            <!-- Starters Menu Items -->
+            <div class="menu-item" data-category="starters">
+                <img src="https://khaddoroshik.com/wp-content/uploads/2023/12/Veg-Manchurian.webp" alt="Veg Manchurian">
+                <h3 style="color: azure;">Veg Manchurian</h3>
+                <p>₹80.00</p>
+                <input type="number" min="0" placeholder="Qty">
+            </div>
+            <div class="menu-item" data-category="starters">
+                <img src="https://img.onmanorama.com/content/dam/mm/en/food/recipe/images/2024/1/3/paneer-tikka.jpg" alt="Paneer Tikka">
+                <h3 style="color: azure;">Paneer Tikka</h3>
+                <p>₹90.00</p>
+                <input type="number" min="0" placeholder="Qty">
+            </div>
+            <!-- Add 3 more starters items here -->
+
+        </div>
+
+        <div class="total-container">
+            <p style="color: #fff;">Total: ₹<span id="total-price">0.00</span></p>
+            <button onclick="showPopup()">View Selected Items</button>
+            <button onclick="proceedToPayment()">Proceed to Payment</button>
+        </div>
+    </div>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h3>Selected Items</h3>
+            <ul id="selected-items-list"></ul>
+            <p>Total of All Categories: ₹<span id="popup-total-price">0.00</span></p>
+            <button onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <p>&copy; 2024 GYC Restaurant</p>
+        <p>17-420 Bhai Road,TamilNadu, Chennai 12-945</p>
+        <p>Email: indianrestaurant@gycrestaurant.com</p>
+    </footer>
+
+    <script>
+        // Event listener for category buttons
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.style.display = category === 'all' || item.getAttribute('data-category') === category ? 'block' : 'none';
+                });
+                calculateTotal(); // Recalculate total when the category is changed
+            });
+        });
+
+        // Function to calculate total prices
+        function calculateTotal() {
+            let totalAll = 0;
+
+            document.querySelectorAll('.menu-item').forEach(item => {
+                const price = parseFloat(item.querySelector('p').textContent.replace('₹', ''));
+                const quantity = parseInt(item.querySelector('input[type="number"]').value) || 0;
+                totalAll += price * quantity;
+            });
+
+            document.getElementById('total-price').textContent = totalAll.toFixed(2);
+        }
+
+        // Update total price on quantity change
+        document.querySelectorAll('.menu-item input[type="number"]').forEach(input => {
+            input.addEventListener('change', calculateTotal);
+        });
+
+        // Show payment section
+        function proceedToPayment() {
+            window.location.href = 'payment.html'; // Redirect to the payment page
+        }
+
+        // Show popup with selected items
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            const list = document.getElementById('selected-items-list');
+            const totalElement = document.getElementById('popup-total-price');
+
+            list.innerHTML = ''; // Clear previous items
+            let totalAll = 0;
+
+            document.querySelectorAll('.menu-item').forEach(item => {
+                const name = item.querySelector('h3').textContent;
+                const price = parseFloat(item.querySelector('p').textContent.replace('₹', ''));
+                const quantity = parseInt(item.querySelector('input[type="number"]').value) || 0;
+
+                if (quantity > 0) {
+                    const itemTotal = price * quantity;
+                    totalAll += itemTotal;
+
+                    list.innerHTML += `<li>${name} - Qty: ${quantity} - ₹${itemTotal.toFixed(2)}</li>`;
+                }
+            });
+
+            totalElement.textContent = totalAll.toFixed(2);
+            popup.style.display = 'flex';
+        }
+
+        // Close popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

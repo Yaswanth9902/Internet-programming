@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - GYC Restaurant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #000000 0%, #302f2f 100%);
+            color: #f8efef;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #4b4a4a;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        .payment-options {
+            margin-top: 20px;
+        }
+
+        .payment-options label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .payment-options input,
+        .payment-options select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .payment-options input:focus,
+        .payment-options select:focus {
+            border-color: #333;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-options button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .payment-options button:hover {
+            background-color: #45a049;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #qr-code {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #qr-code img {
+            max-width: 250px;
+            height: auto;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .button-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .button-wrapper button {
+            width: 100%;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment</h1>
+        <div class="payment-options">
+            <p>Please choose a payment method:</p>
+            <label>
+                <input type="radio" name="payment-method" value="online" checked>
+                Online (UPI/Credit Card)
+            </label>
+            <label>
+                <input type="radio" name="payment-method" value="offline">
+                Offline (Cash)
+            </label>
+
+            <div id="online-payment-options">
+                <label for="payment-method">Choose an online payment method:</label>
+                <select id="online-payment-method" name="online-payment-method" required>
+                    <option value="">Select</option>
+                    <option value="upi">UPI</option>
+                    <option value="credit-card">Credit Card</option>
+                </select>
+
+                <div id="credit-card-info" class="hidden">
+                    <label for="card-number">Credit Card Number:</label>
+                    <input type="text" id="card-number" name="card-number" placeholder="Enter credit card number" required>
+                    
+                    <label for="expiry-date">Expiry Date:</label>
+                    <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" required>
+                    
+                    <label for="cvv">CVV:</label>
+                    <input type="text" id="cvv" name="cvv" placeholder="Enter CVV" required>
+                </div>
+
+                <div id="upi-info" class="hidden">
+                    <p>Scan the QR code below to pay via UPI:</p>
+                    <div id="qr-code">
+                        <img src="https://skynyxtech.com/wp-content/uploads/2024/02/gpay-qr-code.png" alt="UPI QR Code">
+                    </div>
+                </div>
+            </div>
+
+            <div id="offline-payment-options" class="hidden">
+                <p>Cash is accepted. Please pay at the restaurant.</p>
+            </div>
+
+            <div class="button-wrapper">
+                <button onclick="completePayment()">Complete Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle payment method changes
+        document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'online') {
+                    document.getElementById('online-payment-options').style.display = 'block';
+                    document.getElementById('offline-payment-options').style.display = 'none';
+                } else {
+                    document.getElementById('online-payment-options').style.display = 'none';
+                    document.getElementById('offline-payment-options').style.display = 'block';
+                }
+            });
+        });
+
+        // Handle online payment method selection
+        document.getElementById('online-payment-method').addEventListener('change', function() {
+            const method = this.value;
+            if (method === 'credit-card') {
+                document.getElementById('credit-card-info').style.display = 'block';
+                document.getElementById('upi-info').style.display = 'none';
+            } else if (method === 'upi') {
+                document.getElementById('credit-card-info').style.display = 'none';
+                document.getElementById('upi-info').style.display = 'block';
+            } else {
+                document.getElementById('credit-card-info').style.display = 'none';
+                document.getElementById('upi-info').style.display = 'none';
+            }
+        });
+
+        // Complete payment function
+        function completePayment() {
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            if (paymentMethod === 'online') {
+                const onlineMethod = document.getElementById('online-payment-method').value;
+                if (onlineMethod === 'credit-card') {
+                    const cardNumber = document.getElementById('card-number').value;
+                    const expiryDate = document.getElementById('expiry-date').value;
+                    const cvv = document.getElementById('cvv').value;
+                    if (!cardNumber || !expiryDate || !cvv) {
+                        alert('Please fill out all credit card details.');
+                        return;
+                    }
+                } else if (onlineMethod === 'upi') {
+                    // No additional fields to check for UPI
+                } else {
+                    alert('Please select a payment method.');
+                    return;
+                }
+            }
+
+            // Redirect to order confirmation page
+            window.location.href = 'order-success.html';
+        }
+    </script>
+</body>
+</html>
