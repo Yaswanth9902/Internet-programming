@@ -176,7 +176,7 @@
                 }
             });
         });
-
+    
         // Handle online payment method selection
         document.getElementById('online-payment-method').addEventListener('change', function() {
             const method = this.value;
@@ -191,7 +191,7 @@
                 document.getElementById('upi-info').style.display = 'none';
             }
         });
-
+    
         // Complete payment function
         function completePayment() {
             const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
@@ -212,10 +212,10 @@
                     return;
                 }
             }
-
-            // Redirect to order confirmation page
-            window.location.href = 'order-success.html';
+    
+            // Open order-success.html in a new tab
+            window.open('order-success.html', '_blank');
         }
     </script>
-</body>
+    </body>
 </html>
